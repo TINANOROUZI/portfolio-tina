@@ -23,7 +23,7 @@ export default function Connect() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
           {/* GitHub */}
           <a
-            href="https://github.com/TINANOROUZI"
+            href="https://www.linkedin.com/in/tinanorouzimoghaddam?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
             target="_blank"
             rel="noreferrer"
             className="group rounded-2xl border border-stroke/70 bg-white/5 backdrop-blur p-5
