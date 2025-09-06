@@ -114,8 +114,8 @@ export default function OverlayMenu({ open, onClose }) {
           ))}
         </div>
 
-        {/* RIGHT MENU (stable + responsive) */}
-        <div className="flex-1 min-w-0 overflow-y-auto px-6 sm:px-8 md:px-10 py-8 grid place-items-center">
+        {/* RIGHT MENU (stable + responsive, nudged right on mobile) */}
+        <div className="flex-1 min-w-0 overflow-y-auto pr-6 pl-16 sm:pl-10 md:pl-12 py-8 grid place-items-center">
           <ul className="w-full max-w-[560px] space-y-6 sm:space-y-5">
             {menu.map((m, i) => {
               const Inner = "to" in m ? Link : "a";
@@ -139,10 +139,10 @@ export default function OverlayMenu({ open, onClose }) {
                     {...innerProps}
                     onClick={onClose}
                     className="menu-link font-stencil inline-flex items-center text-center leading-[1.05]
-                               text-[clamp(22px,8vw,56px)] select-none"
+                               text-[clamp(18px,6.5vw,50px)] select-none"
                   >
-                    {/* reserved box for pointer to avoid layout shift */}
-                    <span className="relative inline-block w-7 sm:w-8 mr-2">
+                    {/* reserved box for pointer to avoid layout shift; wider + more gap */}
+                    <span className="relative inline-block w-9 sm:w-10 mr-3">
                       <span
                         className={`absolute left-0 top-1/2 -translate-y-1/2 transition-all duration-300
                                    ${active === i ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"}`}
