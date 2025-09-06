@@ -2,10 +2,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-/* Header height: keep in sync with h-12 (48px) */
+/* Keep in sync with top bar h-12 (48px) */
 const TOPBAR_H = 48;
 
-/* --- Inline icons --- */
+/* ---------- Inline icons ---------- */
 const Ico = {
   GitHub: (p) => (
     <svg viewBox="0 0 24 24" fill="currentColor" {...p}>
@@ -29,8 +29,8 @@ const Ico = {
   ),
 };
 
-/* Stripe spans full column height */
-function Stripe({ href, color, label, Icon, delayMs }) {
+/* ---------- Desktop stripe (vertical) ---------- */
+function StripeCol({ href, color, label, Icon, delayMs }) {
   return (
     <a
       className="stripe h-full flex-1"
@@ -40,8 +40,26 @@ function Stripe({ href, color, label, Icon, delayMs }) {
       style={{ backgroundColor: color, transitionDelay: `${delayMs}ms` }}
     >
       <div className="stripe-inner h-full">
-        <Icon className="w-5 h-7 md:w-8 md:h-8 opacity-90 mb-3 md:mb-6" />
+        <Icon className="w-6 h-6 md:w-8 md:h-8 opacity-90 mb-4 md:mb-6" />
         <span className="stripe-text">{label}</span>
+      </div>
+    </a>
+  );
+}
+
+/* ---------- Mobile stripe (horizontal row) ---------- */
+function StripeRow({ href, color, label, Icon, delayMs }) {
+  return (
+    <a
+      className="block w-full h-16 sm:h-18 md:h-20"
+      href={href}
+      target={href.startsWith("#") || href.startsWith("/") ? "_self" : "_blank"}
+      rel="noreferrer"
+      style={{ backgroundColor: color, transitionDelay: `${delayMs}ms` }}
+    >
+      <div className="h-full px-4 flex items-center gap-3 text-white/95">
+        <Icon className="w-7 h-7 opacity-90" />
+        <span className="font-hud text-[18px]">{label}</span>
       </div>
     </a>
   );
@@ -57,8 +75,8 @@ export default function OverlayMenu({ open, onClose }) {
   }, [onClose]);
 
   const stripes = [
-    { label: "Github",   href: "https://github.com/TINANOROUZI",                    color: "#25282d", Icon: Ico.GitHub },
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/tinanorouzimoghaddam", color: "#0b5fa4", Icon: Ico.LinkedIn },
+    { label: "Github",   href: "https://github.com/TINANOROUZI",                    color: "#2b2f35", Icon: Ico.GitHub },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/tinanorouzimoghaddam", color: "#0a66c2", Icon: Ico.LinkedIn },
     { label: "Email",    href: "mailto:tinanoruzi14@gmail.com",                     color: "#35aef3", Icon: Ico.Email },
     { label: "Telegram", href: "https://t.me/tinanoruzi",                           color: "#0b62f5", Icon: Ico.Telegram },
   ];
@@ -79,73 +97,92 @@ export default function OverlayMenu({ open, onClose }) {
       style={{ backdropFilter: "blur(8px)" }}
       aria-hidden={!open}
     >
-      {/* top bar (48px) */}
-      <div className="h-12 bg-accent flex items-center justify-end pr-4 sm:pr-6 shadow-[0_6px_24px_rgba(34,255,102,.25)]">
+      {/* Top neon bar + X */}
+      <div className="h-12 lg:h-20 bg-accent flex items-center justify-end pr-4 sm:pr-6 shadow-[0_6px_24px_rgba(34,255,102,.25)]">
         <button
           aria-label="Close menu"
           onClick={onClose}
           className="group grid place-items-center p-2 rounded-md hover:scale-105 active:scale-95 transition z-[100]"
         >
-          <svg width="38" height="38" viewBox="0 0 24 24" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M5 5l14 14M19 5L5 19" stroke="#0b0f17" strokeWidth="7" strokeLinecap="round" opacity=".22" />
-            <path
-              d="M5 5l14 14M19 5L5 19"
-              stroke="#22ff66"
-              strokeWidth="3.5"
-              strokeLinecap="round"
-              style={{ filter: "drop-shadow(0 0 8px rgba(34,255,102,.45))" }}
-            />
+            <path d="M5 5l14 14M19 5L5 19" stroke="#22ff66" strokeWidth="3.5" strokeLinecap="round"
+              style={{ filter: "drop-shadow(0 0 8px rgba(34,255,102,.45))" }} />
           </svg>
         </button>
       </div>
 
-      {/* content fills the rest of the viewport */}
-      <div
-        className="flex"
-        style={{ height: `calc(100dvh - ${TOPBAR_H}px)` }}
-      >
-        {/* LEFT STRIPES (full-height) */}
-        <div
-          className="flex w-[28vw] min-w-[74px] max-w-[120px] h-full"
-          style={{ height: `calc(100dvh - ${TOPBAR_H}px)` }}
-        >
-          {stripes.map((s, i) => (
-            <Stripe key={s.label} {...s} delayMs={120 + i * 100} />
-          ))}
+      {/* Column = content area */}
+      <div className="flex flex-col" style={{ height: `calc(100dvh - ${TOPBAR_H}px)` }}>
+        {/* Desktop/tablet (≥640px): vertical stripes + centered menu */}
+        <div className="hidden sm:flex flex-1">
+          {/* LEFT vertical stripes */}
+          <div className="flex h-full w-[36vw] min-w-[120px] lg:w-[44vw] lg:min-w-[520px] lg:max-w-[640px]">
+            {stripes.map((s, i) => (
+              <StripeCol key={s.label} {...s} delayMs={120 + i * 100} />
+            ))}
+          </div>
+
+          {/* RIGHT menu (centered) */}
+          <div className="flex-1 min-w-0 overflow-y-auto px-8 lg:px-12 py-10 grid place-items-center">
+            <ul className="w-full max-w-[640px] space-y-8 text-center">
+              {menu.map((m, i) => {
+                const Inner = "to" in m ? Link : "a";
+                const innerProps =
+                  "to" in m
+                    ? { to: m.to }
+                    : { href: m.href, target: m.newTab ? "_blank" : "_self", rel: m.newTab ? "noreferrer" : undefined };
+
+                return (
+                  <li key={m.label} className="reveal" data-delay={i + 1} onMouseEnter={() => setActive(i)}>
+                    <Inner
+                      {...innerProps}
+                      onClick={onClose}
+                      className="menu-link font-hud tracking-[.02em] inline-flex items-center justify-center
+                                 text-center leading-[1.05] text-[clamp(32px,3.6vw,72px)]
+                                 drop-shadow-[0_0_14px_rgba(34,255,102,.35)]"
+                    >
+                      <span className="relative inline-block w-10 mr-4">
+                        <span
+                          className={`absolute left-0 top-1/2 -translate-y-1/2 transition-all duration-300 ${
+                            active === i ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"
+                          }`}
+                        >
+                          👉
+                        </span>
+                      </span>
+                      <span className="block">{m.label}</span>
+                    </Inner>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
 
-        {/* RIGHT MENU (stable + responsive, nudged right on mobile) */}
-        <div className="flex-1 min-w-0 overflow-y-auto pr-6 pl-16 sm:pl-10 md:pl-12 py-8 grid place-items-center">
-          <ul className="w-full max-w-[560px] space-y-6 sm:space-y-5">
+        {/* Mobile (<640px): centered menu + bottom rows */}
+        <div className="sm:hidden flex-1 min-w-0 overflow-y-auto px-6 py-8 grid place-items-center">
+          <ul className="w-full max-w-[520px] space-y-6 text-center">
             {menu.map((m, i) => {
               const Inner = "to" in m ? Link : "a";
               const innerProps =
                 "to" in m
                   ? { to: m.to }
-                  : {
-                      href: m.href,
-                      target: m.newTab ? "_blank" : "_self",
-                      rel: m.newTab ? "noreferrer" : undefined,
-                    };
+                  : { href: m.href, target: m.newTab ? "_blank" : "_self", rel: m.newTab ? "noreferrer" : undefined };
 
               return (
-                <li
-                  key={m.label}
-                  className="reveal"
-                  data-delay={i + 1}
-                  onMouseEnter={() => setActive(i)}
-                >
+                <li key={m.label} className="reveal" data-delay={i + 1} onMouseEnter={() => setActive(i)}>
                   <Inner
                     {...innerProps}
                     onClick={onClose}
-                    className="menu-link font-stencil inline-flex items-center text-center leading-[1.05]
-                               text-[clamp(18px,6.5vw,50px)] select-none"
+                    className="menu-link font-hud inline-flex items-center justify-center text-center
+                               leading-[1.05] text-[clamp(26px,8.2vw,44px)]"
                   >
-                    {/* reserved box for pointer to avoid layout shift; wider + more gap */}
-                    <span className="relative inline-block w-9 sm:w-10 mr-3">
+                    <span className="relative inline-block w-8 mr-2">
                       <span
-                        className={`absolute left-0 top-1/2 -translate-y-1/2 transition-all duration-300
-                                   ${active === i ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"}`}
+                        className={`absolute left-0 top-1/2 -translate-y-1/2 transition-all duration-300 ${
+                          active === i ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"
+                        }`}
                       >
                         👉
                       </span>
@@ -156,6 +193,13 @@ export default function OverlayMenu({ open, onClose }) {
               );
             })}
           </ul>
+        </div>
+
+        {/* Mobile bottom stripes */}
+        <div className="sm:hidden">
+          {stripes.map((s, i) => (
+            <StripeRow key={s.label} {...s} delayMs={120 + i * 100} />
+          ))}
         </div>
       </div>
     </div>
