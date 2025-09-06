@@ -1,3 +1,4 @@
+// src/components/nav/OverlayMenu.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -52,12 +53,13 @@ export default function OverlayMenu({ open, onClose }) {
   }, [onClose]);
 
   const stripes = [
-    { label: "Github",   href: "https://github.com/TINANOROUZI",                     color: "#25282d", Icon: Ico.GitHub },
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/tinanorouzimoghaddam",  color: "#0b5fa4", Icon: Ico.LinkedIn },
-    { label: "Email",    href: "mailto:tinanoruzi14@gmail.com",                      color: "#35aef3", Icon: Ico.Email },
-    { label: "Telegram", href: "https://t.me/tinanoruzi",                            color: "#0b62f5", Icon: Ico.Telegram },
+    { label: "Github",   href: "https://github.com/TINANOROUZI",                        color: "#25282d", Icon: Ico.GitHub },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/tinanorouzimoghaddam",     color: "#0b5fa4", Icon: Ico.LinkedIn },
+    { label: "Email",    href: "mailto:tinanoruzi14@gmail.com",                         color: "#35aef3", Icon: Ico.Email },
+    { label: "Telegram", href: "https://t.me/tinanoruzi",                               color: "#0b62f5", Icon: Ico.Telegram },
   ];
 
+  // Use `to` for internal routes (Link), `href` for anchors/external
   const menu = [
     { label: "HOME",   to: "/" },
     { label: "WORK",   to: "/work" },
@@ -74,7 +76,7 @@ export default function OverlayMenu({ open, onClose }) {
       style={{ backdropFilter: "blur(8px)" }}
       aria-hidden={!open}
     >
-      {/* top bar + close */}
+      {/* top green bar + neon X close */}
       <div className="h-20 bg-accent flex items-center justify-end pr-4 sm:pr-6 shadow-[0_6px_24px_rgba(34,255,102,.25)]">
         <button
           aria-label="Close menu"
@@ -83,38 +85,66 @@ export default function OverlayMenu({ open, onClose }) {
         >
           <svg width="38" height="38" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M5 5l14 14M19 5L5 19" stroke="#0b0f17" strokeWidth="7" strokeLinecap="round" opacity=".22" />
-            <path d="M5 5l14 14M19 5L5 19" stroke="#22ff66" strokeWidth="3.5" strokeLinecap="round" style={{ filter: "drop-shadow(0 0 8px rgba(34,255,102,.45))" }} />
+            <path
+              d="M5 5l14 14M19 5L5 19"
+              stroke="#22ff66"
+              strokeWidth="3.5"
+              strokeLinecap="round"
+              style={{ filter: "drop-shadow(0 0 8px rgba(34,255,102,.45))" }}
+            />
           </svg>
         </button>
       </div>
 
+      {/* stripes + menu */}
       <div className="flex h-[calc(100%-80px)]">
-        {/* LEFT STRIPES */}
-        <div className="flex w-[36%] min-w-[120px] md:w-1/2 h-full">
+        {/* LEFT STRIPES (kept on mobile, just narrower so it never overlaps) */}
+        <div className="flex w-[28vw] min-w-[74px] max-w-[120px] h-full">
           {stripes.map((s, i) => (
             <Stripe key={s.label} {...s} delayMs={120 + i * 100} />
           ))}
         </div>
 
         {/* RIGHT MENU */}
-        <div className="flex-1 grid place-items-center p-4 sm:p-6">
-          <ul className="w-full max-w-[520px] space-y-5">
+        <div className="flex-1 grid place-items-center p-4 sm:p-6 overflow-y-auto">
+          <ul className="w-full max-w-[520px] space-y-6">
             {menu.map((m, i) => (
-              <li key={m.label} className="reveal" data-delay={i + 1} onMouseEnter={() => setActive(i)}>
+              <li
+                key={m.label}
+                className="reveal"
+                data-delay={i + 1}
+                onMouseEnter={() => setActive(i)}
+              >
                 {"to" in m ? (
-                  <Link to={m.to} onClick={onClose} className="menu-link font-stencil">
-                    <span className={`pointer ${active === i ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"}`}>👉</span>
+                  <Link
+                    to={m.to}
+                    onClick={onClose}
+                    className="menu-link font-stencil text-[clamp(28px,10vw,64px)] leading-[1.04]"
+                  >
+                    <span
+                      className={`pointer mr-2 ${
+                        active === i ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
+                      }`}
+                    >
+                      👉
+                    </span>
                     {m.label}
                   </Link>
                 ) : (
                   <a
                     href={m.href}
                     onClick={onClose}
-                    className="menu-link font-stencil"
+                    className="menu-link font-stencil text-[clamp(28px,10vw,64px)] leading-[1.04]"
                     target={m.newTab ? "_blank" : "_self"}
                     rel={m.newTab ? "noreferrer" : undefined}
                   >
-                    <span className={`pointer ${active === i ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"}`}>👉</span>
+                    <span
+                      className={`pointer mr-2 ${
+                        active === i ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
+                      }`}
+                    >
+                      👉
+                    </span>
                     {m.label}
                   </a>
                 )}
