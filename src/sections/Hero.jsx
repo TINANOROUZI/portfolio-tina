@@ -1,18 +1,16 @@
 // src/sections/Hero.jsx
 import { Link } from "react-router-dom";
-import tinaHero from "../assets/tina-hero.png"; // your girl-with-laptop image
+import tinaHero from "../assets/tina-hero.png";
 
 export default function Hero() {
   return (
     <section id="home" className="relative overflow-hidden py-16 sm:py-20">
-      {/* background grid & stars (optional) */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="hero-grid-bg" />
         <div className="starfield" />
       </div>
 
       <div className="relative max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
-        {/* LEFT: text (slide in from left) */}
         <div className="enter-left">
           <span className="pill mb-4 inline-flex">
             <span className="text-lg">👋</span> Hi There! I'm Tina
@@ -30,19 +28,12 @@ export default function Hero() {
           </p>
 
           <div className="mt-8 flex items-center gap-4">
-            {/* Go to Work page */}
-            <Link to="/work" className="btn-primary">
-              See my work
-            </Link>
-
-            {/* Scroll to contact on Home */}
-            <Link to="/#contact" className="btn-ghost">
-              Contact
-            </Link>
+            <Link to="/work" className="btn-primary">See my work</Link>
+            {/* Use router link with hash so the ScrollHandler runs on Android */}
+            <Link to="/#contact" className="btn-ghost">Contact</Link>
           </div>
         </div>
 
-        {/* RIGHT: image (slide in from right) */}
         <div className="enter-right delay-1">
           <img
             src={tinaHero}
