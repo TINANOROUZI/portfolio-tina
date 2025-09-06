@@ -10,17 +10,27 @@ function ScrollHandler() {
   const location = useLocation();
 
   useEffect(() => {
-    // If there is a hash (e.g. #contact) scroll to that element
-    if (location.hash) {
-      const el = document.querySelector(location.hash);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-        return;
-      }
+    // 1) state-based scroll (used by ContactLink when navigating to "/")
+    const targetFromState = location.state && location.state.scrollTo;
+    if (targetFromState) {
+      requestAnimationFrame(() => {
+        document.getElementById(targetFromState)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      return;
     }
-    // Otherwise scroll to top on route change
+
+    // 2) hash-based scroll (e.g. direct link /#contact)
+    if (location.hash) {
+      const id = decodeURIComponent(location.hash.slice(1));
+      requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      return;
+    }
+
+    // 3) default
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [location.pathname, location.hash]);
+  }, [location.pathname, location.hash, location.state]);
 
   return null;
 }
