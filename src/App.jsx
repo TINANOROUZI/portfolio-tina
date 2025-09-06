@@ -10,7 +10,7 @@ function ScrollHandler() {
   const location = useLocation();
 
   useEffect(() => {
-    // If we have a hash (e.g., #contact), try to scroll to that element
+    // If there is a hash (e.g. #contact) scroll to that element
     if (location.hash) {
       const el = document.querySelector(location.hash);
       if (el) {
@@ -18,7 +18,7 @@ function ScrollHandler() {
         return;
       }
     }
-    // Otherwise, scroll to top on route change
+    // Otherwise scroll to top on route change
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [location.pathname, location.hash]);
 
