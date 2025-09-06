@@ -1618,3 +1618,149 @@ body{ font-family: var(--font-body); }
     radial-gradient(ellipse at 70% 70%, rgba(34,255,102,.14), transparent 60%);
   filter: blur(14px);
 }
+/* ===== Neon wrapper for project cards ===== */
+.neon-box {
+  position: relative;
+  border-radius: 22px;
+  padding: 18px;
+  background: rgba(11, 15, 23, 0.65);
+  backdrop-filter: blur(6px);
+  border: 2px solid #22ff66;                 /* neon edge */
+  box-shadow:
+    inset 0 0 0 2px rgba(34,255,102,0.12),   /* inner ring */
+    0 0 24px rgba(34,255,102,0.35),          /* outer glow */
+    0 20px 60px rgba(0,0,0,0.55);            /* depth */
+  transition: box-shadow .25s ease, transform .2s ease, border-color .25s ease;
+}
+
+/* soft bloom */
+.neon-box::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(90% 120% at 20% 0%, rgba(34,255,102,.28), transparent 60%),
+    radial-gradient(120% 100% at 80% 100%, rgba(34,255,102,.18), transparent 60%);
+  filter: blur(12px);
+  opacity: .9;
+}
+
+/* bottom bar glow */
+.neon-box::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: -6px;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, #22ff66, transparent);
+  filter: blur(4px);
+  opacity: .75;
+}
+
+/* stronger on hover */
+.neon-box:hover {
+  border-color: rgba(34,255,102,.8);
+  box-shadow:
+    inset 0 0 0 2px rgba(34,255,102,0.18),
+    0 0 40px rgba(34,255,102,0.45),
+    0 30px 80px rgba(0,0,0,0.6);
+  transform: translateY(-2px);
+}
+
+/* if your inner layout needs a clip edge */
+.neon-box .card-inner {
+  border-radius: 16px;
+  overflow: hidden; /* keeps screenshot corners rounded */
+}
+/* === TINA: 3D tilt + neon green frame (plain CSS version of your code) === */
+:root { --accent:#22ff66; }
+
+.project-tilt {
+  position: relative;
+  border-radius: 26px;
+  padding: 14px;                           /* bezel thickness */
+  background: rgba(11,15,23,.72);
+  backdrop-filter: blur(6px);
+  border: 2px solid var(--accent);
+  box-shadow:
+    inset 0 0 0 2px rgba(34,255,102,.10),
+    0 0 26px rgba(34,255,102,.34),
+    0 22px 68px rgba(0,0,0,.55);
+
+  /* ===== your transform exactly, but scoped to this class ===== */
+  transform:
+    perspective(800px)
+    rotateY(25deg) scale(0.9)
+    rotateX(10deg);
+  filter: blur(2px);
+  opacity: 0.5;
+
+  transition:
+    transform .6s ease,
+    filter .6s ease,
+    opacity .6s ease,
+    box-shadow .6s ease,
+    border-color .6s ease;
+  transform-style: preserve-3d;
+}
+
+/* hover state — exactly like your snippet + neon boost */
+.project-tilt:hover,
+.project-tilt:focus-within {
+  transform:
+    perspective(800px)
+    rotateY(-15deg)
+    translateY(-50px)
+    rotateX(10deg)
+    scale(1);
+  filter: blur(0);
+  opacity: 1;
+  border-color: rgba(34,255,102,.85);
+  box-shadow:
+    inset 0 0 0 2px rgba(34,255,102,.15),
+    0 0 40px rgba(34,255,102,.45),
+    0 30px 90px rgba(0,0,0,.60);
+}
+
+/* inner panel (keeps rounded corners, like a screen) */
+.project-tilt__panel {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(20,28,34,.75), rgba(10,14,18,.85));
+  border: 1px solid rgba(234,241,255,.06);
+}
+
+/* your screenshot/iframe */
+.project-tilt__screen {
+  display: block;
+  width: 100%;
+  height: 420px;            /* adjust to your layout */
+  object-fit: cover;
+  filter: saturate(.98) contrast(1.02);
+}
+
+/* soft glow layers like the reference */
+.project-tilt::before {
+  content:"";
+  position:absolute; inset:-8%;
+  border-radius:32px; pointer-events:none;
+  background:
+    radial-gradient(70% 100% at 15% 0%, rgba(34,255,102,.25), transparent 55%),
+    radial-gradient(110% 80% at 85% 100%, rgba(34,255,102,.18), transparent 60%);
+  filter: blur(14px); opacity:.9; z-index:0;
+}
+.project-tilt::after {
+  content:"";
+  position:absolute; left:8%; right:8%; bottom:-8px; height:7px;
+  border-radius:999px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  filter: blur(4px); opacity:.8;
+}
+
+@media (max-width:1024px){ .project-tilt__screen{ height:320px; } }
+@media (max-width:640px){  .project-tilt{ transform:none; filter:none; opacity:1; } .project-tilt__screen{ height:230px; } }
