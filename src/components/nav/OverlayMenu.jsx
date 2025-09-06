@@ -63,7 +63,7 @@ export default function OverlayMenu({ open, onClose }) {
   const menu = [
     { label: "HOME",   to: "/" },
     { label: "WORK",   to: "/work" },
-    { label: "ABOUT",  to: "/about" },          // ✅ separate page
+    { label: "ABOUT",  to: "/about" },
     { label: "RESUME", href: "/resume.pdf", newTab: true },
     { label: "CONTACT",href: "/#contact" },
   ];
@@ -85,8 +85,13 @@ export default function OverlayMenu({ open, onClose }) {
         >
           <svg width="38" height="38" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M5 5l14 14M19 5L5 19" stroke="#0b0f17" strokeWidth="7" strokeLinecap="round" opacity=".22" />
-            <path d="M5 5l14 14M19 5L5 19" stroke="#22ff66" strokeWidth="3.5" strokeLinecap="round"
-              style={{ filter: "drop-shadow(0 0 8px rgba(34,255,102,.45))" }} />
+            <path
+              d="M5 5l14 14M19 5L5 19"
+              stroke="#22ff66"
+              strokeWidth="3.5"
+              strokeLinecap="round"
+              style={{ filter: "drop-shadow(0 0 8px rgba(34,255,102,.45))" }}
+            />
           </svg>
         </button>
       </div>
@@ -110,7 +115,7 @@ export default function OverlayMenu({ open, onClose }) {
                 onMouseEnter={() => setActive(i)}
               >
                 {"to" in m ? (
-                  <Link to={m.to} onClick={onClose} className="menu-link">
+                  <Link to={m.to} onClick={onClose} className="menu-link font-stencil">
                     <span className={`pointer ${active === i ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"}`}>👉</span>
                     {m.label}
                   </Link>
@@ -118,7 +123,7 @@ export default function OverlayMenu({ open, onClose }) {
                   <a
                     href={m.href}
                     onClick={onClose}
-                    className="menu-link"
+                    className="menu-link font-stencil"
                     target={m.newTab ? "_blank" : "_self"}
                     rel={m.newTab ? "noreferrer" : undefined}
                   >
