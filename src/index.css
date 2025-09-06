@@ -1776,3 +1776,33 @@ body{ font-family: var(--font-body); }
 .preview-tilt * { pointer-events: none; }
 /* but keep the wrapper interactive for hover/tilt JS */
 .preview-tilt { pointer-events: auto; }
+/* HUD / stencil font similar to the screenshot */
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap');
+
+.font-hud {
+  font-family: 'Black Ops One', system-ui, sans-serif;
+  letter-spacing: .5px;
+}
+/* === Staggered stripes in OverlayMenu === */
+@keyframes stripeIn {
+  from { opacity: 0; transform: translateX(-28px) scale(.98); }
+  to   { opacity: 1; transform: translateX(0)      scale(1);   }
+}
+@keyframes rowIn {
+  from { opacity: 0; transform: translateY(18px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);   }
+}
+
+/* Desktop/tablet vertical columns */
+[data-anim="on"] .anim-stripe {
+  animation: stripeIn .55s cubic-bezier(.2,.8,.2,1) both;
+  animation-delay: var(--delay, 0ms);
+}
+.anim-stripe { opacity: 0; }   /* initial */
+
+/* Mobile horizontal rows */
+[data-anim="on"] .anim-row {
+  animation: rowIn .50s cubic-bezier(.2,.8,.2,1) both;
+  animation-delay: var(--delay, 0ms);
+}
+.anim-row { opacity: 0; }      /* initial */
