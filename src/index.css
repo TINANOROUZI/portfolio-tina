@@ -1764,3 +1764,15 @@ body{ font-family: var(--font-body); }
 
 @media (max-width:1024px){ .project-tilt__screen{ height:320px; } }
 @media (max-width:640px){  .project-tilt{ transform:none; filter:none; opacity:1; } .project-tilt__screen{ height:230px; } }
+/* Stencil for overlay menu */
+.font-stencil {
+  font-family: "Stencil Std", fantasy;
+  letter-spacing: .06em;
+  font-weight: 700;
+}
+/* preview is decorative: no click cursor */
+.preview-tilt { cursor: default; }
+/* if you have inner elements, make them ignore clicks too */
+.preview-tilt * { pointer-events: none; }
+/* but keep the wrapper interactive for hover/tilt JS */
+.preview-tilt { pointer-events: auto; }
