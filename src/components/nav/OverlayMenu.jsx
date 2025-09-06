@@ -2,6 +2,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+/* Header height: keep in sync with h-12 (48px) */
+const TOPBAR_H = 48;
+
 /* --- Inline icons --- */
 const Ico = {
   GitHub: (p) => (
@@ -26,17 +29,18 @@ const Ico = {
   ),
 };
 
+/* Stripe spans full column height */
 function Stripe({ href, color, label, Icon, delayMs }) {
   return (
     <a
-      className="stripe"
+      className="stripe h-full flex-1"
       href={href}
       target={href.startsWith("#") || href.startsWith("/") ? "_self" : "_blank"}
       rel="noreferrer"
       style={{ backgroundColor: color, transitionDelay: `${delayMs}ms` }}
     >
-      <div className="stripe-inner">
-        <Icon className="w-3 h-7 md:w-8 md:h-8 opacity-90 mb-3 md:mb-4" />
+      <div className="stripe-inner h-full">
+        <Icon className="w-5 h-7 md:w-8 md:h-8 opacity-90 mb-3 md:mb-6" />
         <span className="stripe-text">{label}</span>
       </div>
     </a>
@@ -53,13 +57,12 @@ export default function OverlayMenu({ open, onClose }) {
   }, [onClose]);
 
   const stripes = [
-    { label: "Github",   href: "https://github.com/TINANOROUZI",                        color: "#25282d", Icon: Ico.GitHub },
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/tinanorouzimoghaddam",     color: "#0b5fa4", Icon: Ico.LinkedIn },
-    { label: "Email",    href: "mailto:tinanoruzi14@gmail.com",                         color: "#35aef3", Icon: Ico.Email },
-    { label: "Telegram", href: "https://t.me/tinanoruzi",                               color: "#0b62f5", Icon: Ico.Telegram },
+    { label: "Github",   href: "https://github.com/TINANOROUZI",                    color: "#25282d", Icon: Ico.GitHub },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/tinanorouzimoghaddam", color: "#0b5fa4", Icon: Ico.LinkedIn },
+    { label: "Email",    href: "mailto:tinanoruzi14@gmail.com",                     color: "#35aef3", Icon: Ico.Email },
+    { label: "Telegram", href: "https://t.me/tinanoruzi",                           color: "#0b62f5", Icon: Ico.Telegram },
   ];
 
-  // Use `to` for internal routes (Link), `href` for anchors/external
   const menu = [
     { label: "HOME",   to: "/" },
     { label: "WORK",   to: "/work" },
@@ -76,7 +79,7 @@ export default function OverlayMenu({ open, onClose }) {
       style={{ backdropFilter: "blur(8px)" }}
       aria-hidden={!open}
     >
-      {/* top green bar + neon X close */}
+      {/* top bar (48px) */}
       <div className="h-12 bg-accent flex items-center justify-end pr-4 sm:pr-6 shadow-[0_6px_24px_rgba(34,255,102,.25)]">
         <button
           aria-label="Close menu"
@@ -96,10 +99,16 @@ export default function OverlayMenu({ open, onClose }) {
         </button>
       </div>
 
-      {/* stripes + menu */}
-      <div className="flex h-[calc(100%-80px)]">
-        {/* LEFT STRIPES (kept on mobile, just narrower so it never overlaps) */}
-        <div className="flex w-[28vw] min-w-[74px] max-w-[120px] h-full">
+      {/* content fills the rest of the viewport */}
+      <div
+        className="flex"
+        style={{ height: `calc(100dvh - ${TOPBAR_H}px)` }}
+      >
+        {/* LEFT STRIPES (full-height) */}
+        <div
+          className="flex w-[28vw] min-w-[74px] max-w-[120px] h-full"
+          style={{ height: `calc(100dvh - ${TOPBAR_H}px)` }}
+        >
           {stripes.map((s, i) => (
             <Stripe key={s.label} {...s} delayMs={120 + i * 100} />
           ))}
