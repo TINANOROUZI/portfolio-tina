@@ -1,15 +1,12 @@
-// src/sections/Connect.jsx
 export default function Connect() {
   return (
     <section id="contact" className="relative py-16 sm:py-24">
-      {/* subtle grid/stars (optional) */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="hero-grid-bg" />
         <div className="starfield" />
       </div>
 
       <div className="relative max-w-6xl mx-auto px-4">
-        {/* Title */}
         <div className="mb-10 sm:mb-14">
           <h2 className="section-title text-ink">
             <span className="mark-neon">Let’s Connect</span>
@@ -19,11 +16,10 @@ export default function Connect() {
           </p>
         </div>
 
-        {/* Contact tiles */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
           {/* GitHub */}
           <a
-            href="https://www.linkedin.com/in/tinanorouzimoghaddam?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+            href="https://github.com/TINANOROUZI"
             target="_blank"
             rel="noreferrer"
             className="group rounded-2xl border border-stroke/70 bg-white/5 backdrop-blur p-5
@@ -40,9 +36,9 @@ export default function Connect() {
             </div>
           </a>
 
-          {/* LinkedIn */}
+          {/* LinkedIn (UPDATED) */}
           <a
-            href="https://www.linkedin.com/in/tinanoruziimoghaddam"
+            href="https://www.linkedin.com/in/tinanorouzimoghaddam"
             target="_blank"
             rel="noreferrer"
             className="group rounded-2xl border border-stroke/70 bg-white/5 backdrop-blur p-5
@@ -54,7 +50,7 @@ export default function Connect() {
               <LinkedInIcon className="w-8 h-8 opacity-90 group-hover:drop-shadow-[0_0_10px_rgba(34,255,102,.45)]" />
               <div>
                 <div className="text-lg font-semibold">LinkedIn</div>
-                <div className="text-sm text-ink/60">/tinanoruziimoghaddam</div>
+                <div className="text-sm text-ink/60">/tinanorouzimoghaddam</div>
               </div>
             </div>
           </a>
@@ -96,7 +92,6 @@ export default function Connect() {
           </a>
         </div>
 
-        {/* Footer */}
         <div className="mt-12 border-t border-stroke/50 pt-5 text-sm text-ink/70">
           Built From Scratch With <span className="text-accent">💚</span> © {new Date().getFullYear()} Tina. All rights reserved.
         </div>
@@ -105,8 +100,7 @@ export default function Connect() {
   );
 }
 
-/* ---------- inline icons (no external deps) ---------- */
-
+/* ---------- inline icons ---------- */
 function GitHubIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -114,7 +108,6 @@ function GitHubIcon(props) {
     </svg>
   );
 }
-
 function LinkedInIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -122,7 +115,6 @@ function LinkedInIcon(props) {
     </svg>
   );
 }
-
 function MailIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -130,7 +122,6 @@ function MailIcon(props) {
     </svg>
   );
 }
-
 function TelegramIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
