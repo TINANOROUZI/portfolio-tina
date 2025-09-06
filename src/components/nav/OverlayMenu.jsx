@@ -36,7 +36,7 @@ function Stripe({ href, color, label, Icon, delayMs }) {
       style={{ backgroundColor: color, transitionDelay: `${delayMs}ms` }}
     >
       <div className="stripe-inner">
-        <Icon className="w-7 h-7 md:w-8 md:h-8 opacity-90 mb-3 md:mb-4" />
+        <Icon className="w-3 h-7 md:w-8 md:h-8 opacity-90 mb-3 md:mb-4" />
         <span className="stripe-text">{label}</span>
       </div>
     </a>
