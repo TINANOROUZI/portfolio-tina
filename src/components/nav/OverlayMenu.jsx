@@ -114,51 +114,47 @@ export default function OverlayMenu({ open, onClose }) {
           ))}
         </div>
 
-        {/* RIGHT MENU */}
-        <div className="flex-1 grid place-items-center p-16 sm:p-6 overflow-y-auto">
-          <ul className="w-full max-w-[520px] space-y-6">
-            {menu.map((m, i) => (
-              <li
-                key={m.label}
-                className="reveal"
-                data-delay={i + 1}
-                onMouseEnter={() => setActive(i)}
-              >
-                {"to" in m ? (
-                  <Link
-                    to={m.to}
+        {/* RIGHT MENU (stable + responsive) */}
+        <div className="flex-1 min-w-0 overflow-y-auto px-6 sm:px-8 md:px-10 py-8 grid place-items-center">
+          <ul className="w-full max-w-[560px] space-y-6 sm:space-y-5">
+            {menu.map((m, i) => {
+              const Inner = "to" in m ? Link : "a";
+              const innerProps =
+                "to" in m
+                  ? { to: m.to }
+                  : {
+                      href: m.href,
+                      target: m.newTab ? "_blank" : "_self",
+                      rel: m.newTab ? "noreferrer" : undefined,
+                    };
+
+              return (
+                <li
+                  key={m.label}
+                  className="reveal"
+                  data-delay={i + 1}
+                  onMouseEnter={() => setActive(i)}
+                >
+                  <Inner
+                    {...innerProps}
                     onClick={onClose}
-                    className="menu-link font-stencil text-[clamp(28px,10vw,64px)] leading-[1.04]"
+                    className="menu-link font-stencil inline-flex items-center text-center leading-[1.05]
+                               text-[clamp(22px,8vw,56px)] select-none"
                   >
-                    <span
-                      className={`pointer mr-2 ${
-                        active === i ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
-                      }`}
-                    >
-                      👉
+                    {/* reserved box for pointer to avoid layout shift */}
+                    <span className="relative inline-block w-7 sm:w-8 mr-2">
+                      <span
+                        className={`absolute left-0 top-1/2 -translate-y-1/2 transition-all duration-300
+                                   ${active === i ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"}`}
+                      >
+                        👉
+                      </span>
                     </span>
-                    {m.label}
-                  </Link>
-                ) : (
-                  <a
-                    href={m.href}
-                    onClick={onClose}
-                    className="menu-link font-stencil text-[clamp(28px,10vw,64px)] leading-[1.04]"
-                    target={m.newTab ? "_blank" : "_self"}
-                    rel={m.newTab ? "noreferrer" : undefined}
-                  >
-                    <span
-                      className={`pointer mr-2 ${
-                        active === i ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
-                      }`}
-                    >
-                      👉
-                    </span>
-                    {m.label}
-                  </a>
-                )}
-              </li>
-            ))}
+                    <span className="block">{m.label}</span>
+                  </Inner>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>
