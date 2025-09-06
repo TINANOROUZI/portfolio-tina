@@ -77,7 +77,7 @@ export default function OverlayMenu({ open, onClose }) {
       aria-hidden={!open}
     >
       {/* top green bar + neon X close */}
-      <div className="h-20 bg-accent flex items-center justify-end pr-4 sm:pr-6 shadow-[0_6px_24px_rgba(34,255,102,.25)]">
+      <div className="h-12 bg-accent flex items-center justify-end pr-4 sm:pr-6 shadow-[0_6px_24px_rgba(34,255,102,.25)]">
         <button
           aria-label="Close menu"
           onClick={onClose}
@@ -106,7 +106,7 @@ export default function OverlayMenu({ open, onClose }) {
         </div>
 
         {/* RIGHT MENU */}
-        <div className="flex-1 grid place-items-center p-4 sm:p-6 overflow-y-auto">
+        <div className="flex-1 grid place-items-center p-16 sm:p-6 overflow-y-auto">
           <ul className="w-full max-w-[520px] space-y-6">
             {menu.map((m, i) => (
               <li
