@@ -1,6 +1,6 @@
-// src/components/nav/OverlayMenu.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import resumePdf from "../../assets/cv.pdf"; // ← uses your existing location
 
 /* Keep in sync with top bar h-12 (48px) */
 const TOPBAR_H = 48;
@@ -81,15 +81,12 @@ export default function OverlayMenu({ open, onClose }) {
     { label: "Telegram", href: "https://t.me/tinanoruzi",                           color: "#0b62f5", Icon: Ico.Telegram },
   ];
 
-  // absolute URL avoids SPA base/path issues
-  const RESUME_URL = new URL("/cv.pdf", window.location.origin).href;
-
+  // Menu entries: Resume uses imported PDF URL
   const menu = [
     { label: "HOME",   to: "/" },
     { label: "WORK",   to: "/work" },
     { label: "ABOUT",  to: "/about" },
-    // Resume will be rendered as a BUTTON (not a link) to fully bypass the router
-    { label: "RESUME", href: RESUME_URL, newTab: true, isResume: true },
+    { label: "RESUME", href: resumePdf, newTab: true, isResume: true }, // ← uses imported URL
     { label: "CONTACT",href: "/#contact" },
   ];
 
@@ -100,13 +97,9 @@ export default function OverlayMenu({ open, onClose }) {
       className={`fixed inset-0 z-[90] bg-[#0a0f16]/95 overlay-enter ${open ? "active" : ""}`}
       style={{ backdropFilter: "blur(8px)" }}
       aria-hidden={!open}
-      onClick={onClose}
     >
       {/* Top neon bar + X */}
-      <div
-        className="h-12 lg:h-20 bg-accent flex items-center justify-end pr-4 sm:pr-6 shadow-[0_6px_24px_rgba(34,255,102,.25)]"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="h-12 lg:h-20 bg-accent flex items-center justify-end pr-4 sm:pr-6 shadow-[0_6px_24px_rgba(34,255,102,.25)]">
         <button
           aria-label="Close menu"
           onClick={onClose}
@@ -121,11 +114,7 @@ export default function OverlayMenu({ open, onClose }) {
       </div>
 
       {/* Column = content area */}
-      <div
-        className="flex flex-col"
-        style={{ height: `calc(100dvh - ${TOPBAR_H}px)` }}
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="flex flex-col" style={{ height: `calc(100dvh - ${TOPBAR_H}px)` }}>
         {/* Desktop/tablet (≥640px): vertical stripes + centered menu */}
         <div className="hidden sm:flex flex-1">
           {/* LEFT vertical stripes */}
@@ -139,16 +128,19 @@ export default function OverlayMenu({ open, onClose }) {
           <div className="flex-1 min-w-0 overflow-y-auto px-8 lg:px-12 py-10 grid place-items-center">
             <ul className="w-full max-w-[640px] space-y-8 text-center">
               {menu.map((m, i) => {
-                // 🔒 SPECIAL CASE: RESUME as a BUTTON
-                if (m.isResume) {
+                const isResume = m.isResume === true;
+
+                // For RESUME we prefer a direct <a> with imported URL
+                if (isResume) {
                   return (
                     <li key={m.label} className="reveal" data-delay={i + 1} onMouseEnter={() => setActive(i)}>
-                      <button
-                        type="button"
+                      <a
+                        href={resumePdf}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         onClick={(e) => {
-                          e.preventDefault();
+                          // prevent any overlay/router interference
                           e.stopPropagation();
-                          window.open(RESUME_URL, "_blank", "noopener,noreferrer");
                           onClose();
                         }}
                         className="menu-link font-hud tracking-[.02em] inline-flex items-center justify-center
@@ -165,12 +157,11 @@ export default function OverlayMenu({ open, onClose }) {
                           </span>
                         </span>
                         <span className="block">{m.label}</span>
-                      </button>
+                      </a>
                     </li>
                   );
                 }
 
-                // Normal items (Link or <a>)
                 const Inner = "to" in m ? Link : "a";
                 const innerProps =
                   "to" in m
@@ -182,7 +173,6 @@ export default function OverlayMenu({ open, onClose }) {
                     <Inner
                       {...innerProps}
                       onClick={(e) => {
-                        // normal links: close overlay after navigation
                         onClose();
                       }}
                       className="menu-link font-hud tracking-[.02em] inline-flex items-center justify-center
@@ -211,15 +201,17 @@ export default function OverlayMenu({ open, onClose }) {
         <div className="sm:hidden flex-1 min-w-0 overflow-y-auto px-6 py-8 grid place-items-center">
           <ul className="w-full max-w-[520px] space-y-6 text-center">
             {menu.map((m, i) => {
-              if (m.isResume) {
+              const isResume = m.isResume === true;
+
+              if (isResume) {
                 return (
                   <li key={m.label} className="reveal" data-delay={i + 1} onMouseEnter={() => setActive(i)}>
-                    <button
-                      type="button"
+                    <a
+                      href={resumePdf}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       onClick={(e) => {
-                        e.preventDefault();
                         e.stopPropagation();
-                        window.open(RESUME_URL, "_blank", "noopener,noreferrer");
                         onClose();
                       }}
                       className="menu-link font-hud inline-flex items-center justify-center text-center
@@ -235,7 +227,7 @@ export default function OverlayMenu({ open, onClose }) {
                         </span>
                       </span>
                       <span className="block">{m.label}</span>
-                    </button>
+                    </a>
                   </li>
                 );
               }
@@ -247,39 +239,4 @@ export default function OverlayMenu({ open, onClose }) {
                   : { href: m.href, target: m.newTab ? "_blank" : "_self", rel: m.newTab ? "noreferrer" : undefined };
 
               return (
-                <li key={m.label} className="reveal" data-delay={i + 1} onMouseEnter={() => setActive(i)}>
-                  <Inner
-                    {...innerProps}
-                    onClick={(e) => {
-                      onClose();
-                    }}
-                    className="menu-link font-hud inline-flex items-center justify-center text-center
-                               leading-[1.05] text-[clamp(26px,8.2vw,44px)]"
-                  >
-                    <span className="relative inline-block w-8 mr-2">
-                      <span
-                        className={`absolute left-0 top-1/2 -translate-y-1/2 transition-all duration-300 ${
-                          active === i ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"
-                        }`}
-                      >
-                        👉
-                      </span>
-                    </span>
-                    <span className="block">{m.label}</span>
-                  </Inner>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-
-        {/* Mobile bottom stripes */}
-        <div className="sm:hidden">
-          {stripes.map((s, i) => (
-            <StripeRow key={s.label} {...s} delayMs={120 + i * 100} />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
+                <li key={m.label} className="reveal" data-delay={i + 1}
