@@ -81,13 +81,16 @@ export default function OverlayMenu({ open, onClose }) {
     { label: "Telegram", href: "https://t.me/tinanoruzi",                           color: "#0b62f5", Icon: Ico.Telegram },
   ];
 
-  const menu = [
-    { label: "HOME",   to: "/" },
-    { label: "WORK",   to: "/work" },
-    { label: "ABOUT",  to: "/about" },
-    { label: "RESUME", href: "/resume.pdf", newTab: true },
-    { label: "CONTACT",href: "/#contact" },
-  ];
+  // src/components/nav/OverlayMenu.jsx
+// ...
+const menu = [
+  { label: "HOME",   to: "/" },
+  { label: "WORK",   to: "/work" },
+  { label: "ABOUT",  to: "/about" },
+  { label: "RESUME", href: "/cv.pdf", newTab: true },   // ← fix: use /cv.pdf
+  { label: "CONTACT",href: "/#contact" },
+];
+
 
   if (!open) return null;
 
