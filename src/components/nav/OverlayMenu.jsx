@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import resumePdf from "../../assets/cv.pdf"; // ← uses your existing location
+
+// ✅ use Vite-safe asset URL for your src/assets/cv.pdf
+const resumePdf = new URL("../../assets/cv.pdf", import.meta.url).href;
 
 /* Keep in sync with top bar h-12 (48px) */
 const TOPBAR_H = 48;
@@ -81,12 +83,12 @@ export default function OverlayMenu({ open, onClose }) {
     { label: "Telegram", href: "https://t.me/tinanoruzi",                           color: "#0b62f5", Icon: Ico.Telegram },
   ];
 
-  // Menu entries: Resume uses imported PDF URL
+  // Resume uses the imported asset URL
   const menu = [
     { label: "HOME",   to: "/" },
     { label: "WORK",   to: "/work" },
     { label: "ABOUT",  to: "/about" },
-    { label: "RESUME", href: resumePdf, newTab: true, isResume: true }, // ← uses imported URL
+    { label: "RESUME", href: resumePdf, newTab: true, isResume: true },
     { label: "CONTACT",href: "/#contact" },
   ];
 
@@ -130,7 +132,6 @@ export default function OverlayMenu({ open, onClose }) {
               {menu.map((m, i) => {
                 const isResume = m.isResume === true;
 
-                // For RESUME we prefer a direct <a> with imported URL
                 if (isResume) {
                   return (
                     <li key={m.label} className="reveal" data-delay={i + 1} onMouseEnter={() => setActive(i)}>
@@ -139,7 +140,6 @@ export default function OverlayMenu({ open, onClose }) {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => {
-                          // prevent any overlay/router interference
                           e.stopPropagation();
                           onClose();
                         }}
@@ -239,4 +239,39 @@ export default function OverlayMenu({ open, onClose }) {
                   : { href: m.href, target: m.newTab ? "_blank" : "_self", rel: m.newTab ? "noreferrer" : undefined };
 
               return (
-                <li key={m.label} className="reveal" data-delay={i + 1}
+                <li key={m.label} className="reveal" data-delay={i + 1} onMouseEnter={() => setActive(i)}>
+                  <Inner
+                    {...innerProps}
+                    onClick={(e) => {
+                      onClose();
+                    }}
+                    className="menu-link font-hud inline-flex items-center justify-center text-center
+                               leading-[1.05] text-[clamp(26px,8.2vw,44px)]"
+                  >
+                    <span className="relative inline-block w-8 mr-2">
+                      <span
+                        className={`absolute left-0 top-1/2 -translate-y-1/2 transition-all duration-300 ${
+                          active === i ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"
+                        }`}
+                      >
+                        👉
+                      </span>
+                    </span>
+                    <span className="block">{m.label}</span>
+                  </Inner>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
+        {/* Mobile bottom stripes */}
+        <div className="sm:hidden">
+          {stripes.map((s, i) => (
+            <StripeRow key={s.label} {...s} delayMs={120 + i * 100} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
