@@ -5,6 +5,7 @@ import HamburgerFab from "./components/nav/HamburgerFab.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import WorkPage from "./pages/WorkPage.jsx";
 import AboutPage from "./pages/AboutPage.jsx";
+import ResumePage from "./pages/ResumePage.jsx"; // ✅ added
 
 function ScrollHandler() {
   const location = useLocation();
@@ -14,7 +15,10 @@ function ScrollHandler() {
     const targetFromState = location.state && location.state.scrollTo;
     if (targetFromState) {
       requestAnimationFrame(() => {
-        document.getElementById(targetFromState)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        document.getElementById(targetFromState)?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
       });
       return;
     }
@@ -23,7 +27,10 @@ function ScrollHandler() {
     if (location.hash) {
       const id = decodeURIComponent(location.hash.slice(1));
       requestAnimationFrame(() => {
-        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        document.getElementById(id)?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
       });
       return;
     }
@@ -45,6 +52,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/work" element={<WorkPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/resume" element={<ResumePage />} /> {/* ✅ added */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
