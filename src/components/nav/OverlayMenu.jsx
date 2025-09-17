@@ -81,16 +81,13 @@ export default function OverlayMenu({ open, onClose }) {
     { label: "Telegram", href: "https://t.me/tinanoruzi",                           color: "#0b62f5", Icon: Ico.Telegram },
   ];
 
-  // src/components/nav/OverlayMenu.jsx
-// ...
-const menu = [
-  { label: "HOME",   to: "/" },
-  { label: "WORK",   to: "/work" },
-  { label: "ABOUT",  to: "/about" },
-  { label: "RESUME", href: "/cv.pdf", newTab: true },   // ← fix: use /cv.pdf
-  { label: "CONTACT",href: "/#contact" },
-];
-
+  const menu = [
+    { label: "HOME",   to: "/" },
+    { label: "WORK",   to: "/work" },
+    { label: "ABOUT",  to: "/about" },
+    { label: "RESUME", href: "/cv.pdf", newTab: true }, // ✅ corrected
+    { label: "CONTACT",href: "/#contact" },
+  ];
 
   if (!open) return null;
 
@@ -140,7 +137,14 @@ const menu = [
                   <li key={m.label} className="reveal" data-delay={i + 1} onMouseEnter={() => setActive(i)}>
                     <Inner
                       {...innerProps}
-                      onClick={onClose}
+                      onClick={(e) => {
+                        if (!("to" in m) && m.href === "/cv.pdf") {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          window.open("/cv.pdf", "_blank", "noopener,noreferrer");
+                        }
+                        onClose();
+                      }}
                       className="menu-link font-hud tracking-[.02em] inline-flex items-center justify-center
                                  text-center leading-[1.05] text-[clamp(32px,3.6vw,72px)]
                                  drop-shadow-[0_0_14px_rgba(34,255,102,.35)]"
@@ -177,7 +181,14 @@ const menu = [
                 <li key={m.label} className="reveal" data-delay={i + 1} onMouseEnter={() => setActive(i)}>
                   <Inner
                     {...innerProps}
-                    onClick={onClose}
+                    onClick={(e) => {
+                      if (!("to" in m) && m.href === "/cv.pdf") {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        window.open("/cv.pdf", "_blank", "noopener,noreferrer");
+                      }
+                      onClose();
+                    }}
                     className="menu-link font-hud inline-flex items-center justify-center text-center
                                leading-[1.05] text-[clamp(26px,8.2vw,44px)]"
                   >
