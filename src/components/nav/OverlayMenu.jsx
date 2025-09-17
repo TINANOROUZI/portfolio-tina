@@ -81,11 +81,15 @@ export default function OverlayMenu({ open, onClose }) {
     { label: "Telegram", href: "https://t.me/tinanoruzi",                           color: "#0b62f5", Icon: Ico.Telegram },
   ];
 
+  // absolute URL avoids SPA base/path issues
+  const RESUME_URL = new URL("/cv.pdf", window.location.origin).href;
+
   const menu = [
     { label: "HOME",   to: "/" },
     { label: "WORK",   to: "/work" },
     { label: "ABOUT",  to: "/about" },
-    { label: "RESUME", href: "/cv.pdf", newTab: true }, // ✅ corrected
+    // Resume will be rendered as a BUTTON (not a link) to fully bypass the router
+    { label: "RESUME", href: RESUME_URL, newTab: true, isResume: true },
     { label: "CONTACT",href: "/#contact" },
   ];
 
@@ -96,9 +100,13 @@ export default function OverlayMenu({ open, onClose }) {
       className={`fixed inset-0 z-[90] bg-[#0a0f16]/95 overlay-enter ${open ? "active" : ""}`}
       style={{ backdropFilter: "blur(8px)" }}
       aria-hidden={!open}
+      onClick={onClose}
     >
       {/* Top neon bar + X */}
-      <div className="h-12 lg:h-20 bg-accent flex items-center justify-end pr-4 sm:pr-6 shadow-[0_6px_24px_rgba(34,255,102,.25)]">
+      <div
+        className="h-12 lg:h-20 bg-accent flex items-center justify-end pr-4 sm:pr-6 shadow-[0_6px_24px_rgba(34,255,102,.25)]"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           aria-label="Close menu"
           onClick={onClose}
@@ -113,7 +121,11 @@ export default function OverlayMenu({ open, onClose }) {
       </div>
 
       {/* Column = content area */}
-      <div className="flex flex-col" style={{ height: `calc(100dvh - ${TOPBAR_H}px)` }}>
+      <div
+        className="flex flex-col"
+        style={{ height: `calc(100dvh - ${TOPBAR_H}px)` }}
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Desktop/tablet (≥640px): vertical stripes + centered menu */}
         <div className="hidden sm:flex flex-1">
           {/* LEFT vertical stripes */}
@@ -127,6 +139,38 @@ export default function OverlayMenu({ open, onClose }) {
           <div className="flex-1 min-w-0 overflow-y-auto px-8 lg:px-12 py-10 grid place-items-center">
             <ul className="w-full max-w-[640px] space-y-8 text-center">
               {menu.map((m, i) => {
+                // 🔒 SPECIAL CASE: RESUME as a BUTTON
+                if (m.isResume) {
+                  return (
+                    <li key={m.label} className="reveal" data-delay={i + 1} onMouseEnter={() => setActive(i)}>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          window.open(RESUME_URL, "_blank", "noopener,noreferrer");
+                          onClose();
+                        }}
+                        className="menu-link font-hud tracking-[.02em] inline-flex items-center justify-center
+                                   text-center leading-[1.05] text-[clamp(32px,3.6vw,72px)]
+                                   drop-shadow-[0_0_14px_rgba(34,255,102,.35)]"
+                      >
+                        <span className="relative inline-block w-10 mr-4">
+                          <span
+                            className={`absolute left-0 top-1/2 -translate-y-1/2 transition-all duration-300 ${
+                              active === i ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"
+                            }`}
+                          >
+                            👉
+                          </span>
+                        </span>
+                        <span className="block">{m.label}</span>
+                      </button>
+                    </li>
+                  );
+                }
+
+                // Normal items (Link or <a>)
                 const Inner = "to" in m ? Link : "a";
                 const innerProps =
                   "to" in m
@@ -138,11 +182,7 @@ export default function OverlayMenu({ open, onClose }) {
                     <Inner
                       {...innerProps}
                       onClick={(e) => {
-                        if (!("to" in m) && m.href === "/cv.pdf") {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          window.open("/cv.pdf", "_blank", "noopener,noreferrer");
-                        }
+                        // normal links: close overlay after navigation
                         onClose();
                       }}
                       className="menu-link font-hud tracking-[.02em] inline-flex items-center justify-center
@@ -171,6 +211,35 @@ export default function OverlayMenu({ open, onClose }) {
         <div className="sm:hidden flex-1 min-w-0 overflow-y-auto px-6 py-8 grid place-items-center">
           <ul className="w-full max-w-[520px] space-y-6 text-center">
             {menu.map((m, i) => {
+              if (m.isResume) {
+                return (
+                  <li key={m.label} className="reveal" data-delay={i + 1} onMouseEnter={() => setActive(i)}>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        window.open(RESUME_URL, "_blank", "noopener,noreferrer");
+                        onClose();
+                      }}
+                      className="menu-link font-hud inline-flex items-center justify-center text-center
+                                 leading-[1.05] text-[clamp(26px,8.2vw,44px)]"
+                    >
+                      <span className="relative inline-block w-8 mr-2">
+                        <span
+                          className={`absolute left-0 top-1/2 -translate-y-1/2 transition-all duration-300 ${
+                            active === i ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"
+                          }`}
+                        >
+                          👉
+                        </span>
+                      </span>
+                      <span className="block">{m.label}</span>
+                    </button>
+                  </li>
+                );
+              }
+
               const Inner = "to" in m ? Link : "a";
               const innerProps =
                 "to" in m
@@ -182,11 +251,6 @@ export default function OverlayMenu({ open, onClose }) {
                   <Inner
                     {...innerProps}
                     onClick={(e) => {
-                      if (!("to" in m) && m.href === "/cv.pdf") {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        window.open("/cv.pdf", "_blank", "noopener,noreferrer");
-                      }
                       onClose();
                     }}
                     className="menu-link font-hud inline-flex items-center justify-center text-center
